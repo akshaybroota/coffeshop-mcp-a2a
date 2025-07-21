@@ -15,13 +15,9 @@ SESSION_SECRET_KEY = "b7f8c2e1a9d4f6e3b5a1c7d8e2f4a6b9"
 mcp = FastMCP(name="CoffeeShopAPI")
 mcp_app = mcp.http_app(path="/mcp")
 
-
 app = FastAPI(title="Fake Coffee Shop API", lifespan=mcp_app.lifespan)
 app.mount("/mcp-server", mcp_app)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
-
-
-# Add a GET endpoint at /mcp
 
 # Sample menu data
 MENU_ITEMS = [
@@ -37,31 +33,26 @@ MENU_ITEMS = [
         "description": "Espresso with hot water."},
 ]
 
-
 class MenuItem(BaseModel):
     id: int
     name: str
     price: float
     description: str
 
-
 class ReservationRequest(BaseModel):
     name: str
     time: str  # In a real app, use datetime
     guests: int
 
-
 class ReservationResponse(BaseModel):
     message: str
     reservation_id: int
-
 
 @mcp.tool
 @app.get("/menu", response_model=List[MenuItem])
 def get_all_menu_items():
     """Get all menu items."""
     return MENU_ITEMS
-
 
 @mcp.tool
 @app.get("/menu/search", response_model=List[MenuItem])
@@ -74,9 +65,7 @@ def search_specific_menu_item(query: str = Query(..., description="Search term f
             status_code=404, detail="No menu items found matching your search.")
     return results
 
-
 RESERVATION_FILE = "reservations.json"
-
 
 def load_reservations():
     if not os.path.exists(RESERVATION_FILE):
@@ -87,11 +76,9 @@ def load_reservations():
         except json.JSONDecodeError:
             return []
 
-
 def save_reservations(reservations):
     with open(RESERVATION_FILE, "w", encoding="utf-8") as f:
         json.dump(reservations, f, indent=2)
-
 
 @mcp.tool
 @app.post("/reservation", response_model=ReservationResponse)
@@ -113,7 +100,6 @@ def book_a_reservation(reservation: ReservationRequest):
         message=f"Reservation for {reservation.name} at {reservation.time} for {reservation.guests} guests confirmed!",
         reservation_id=reservation_id
     )
-
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8080, reload=True)
