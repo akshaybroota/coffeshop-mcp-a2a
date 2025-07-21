@@ -6,7 +6,7 @@ from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPConnecti
 import os
 
 load_dotenv
-os.environ["GOOGLE_API_KEY"] = "AIzaSyD-CcXq_j4aFxCuS1l3UBm69cWd2jqCVpM"
+os.environ["GOOGLE_API_KEY"] = "<YOUR GOOGLE API KEY>"
 os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
 
 logging.basicConfig(level=logging.INFO)
