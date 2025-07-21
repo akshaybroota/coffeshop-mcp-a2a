@@ -1,0 +1,4 @@
+google-adk
+google-cloud-aiplatform
+a2a-sdk
+python-dateutil
